@@ -1,0 +1,4 @@
+name = Custom Contact Form Block
+description = Provides a custom contact form as a block
+core = 7.x
+package = Custom

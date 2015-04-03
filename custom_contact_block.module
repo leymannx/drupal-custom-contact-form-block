@@ -1,0 +1,253 @@
+<?php
+/**
+ * @file
+ * Providing a custom contact form inside a custom block
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function custom_contact_block_block_info() {
+	$blocks = array();
+
+	$blocks['custom_contact'] = array(
+		'info' => t('Custom Contact Form'),
+	);
+	return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function custom_contact_block_block_view($delta = '') {
+	$block = array();
+	
+	switch ($delta) {
+		case 'custom_contact':
+		$block['content'] = _custom_contact_block_content();
+		break;
+	}
+	return $block;
+}
+
+function _custom_contact_block_content() {
+	return drupal_get_form('custom_contact_form');
+}
+
+/**
+ * Implements hook_form().
+ */
+function custom_contact_form($form, &$form_state) {
+
+	$form['person'] = array(
+		'#type' => 'container',
+		);
+	$form['person']['name'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Last name'),
+		'#title_display' => 'invisible',
+		'#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('Last name'),
+			),
+		);
+	$form['person']['first_name'] = array(
+		'#type' => 'textfield',
+		'#title' => t('First name'),
+		'#title_display' => 'invisible',
+		'#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('First name'),
+			),
+		);
+	$form['person']['company'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Company'),
+		'#title_display' => 'invisible',
+		'#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('Company'),
+			),
+		);
+	$form['person']['street'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Street'),
+		'#title_display' => 'invisible',
+		// '#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('Street'),
+			),
+		);
+	$form['person']['postcode'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Zip/Post code'),
+		'#title_display' => 'invisible',
+		// '#size' => 15,
+		// '#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('Zip/Post code'),
+			),
+		);
+	$form['person']['city'] = array(
+		'#type' => 'textfield',
+		'#title' => t('City'),
+		'#title_display' => 'invisible',
+		// '#size' => 43,
+		// '#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('City'),
+			),
+		);
+	$form['person']['country'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Country'),
+		'#title_display' => 'invisible',
+		// '#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('Country'),
+			),
+		);
+	$form['person']['email'] = array(
+		'#type' => 'textfield',
+		'#title' => t('E-mail'),
+		'#title_display' => 'invisible',
+		'#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('E-mail'),
+			),
+		);
+	$form['person']['website'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Website'),
+		'#title_display' => 'invisible',
+		'#attributes' => array(
+			'placeholder' => t('Website'),
+			),
+		);
+	$form['person']['phone'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Telephone'),
+		'#title_display' => 'invisible',
+		'#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => t('Telephone'),
+			),
+		);
+	$form['person']['telefax'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Fax'),
+		'#title_display' => 'invisible',
+		'#attributes' => array(
+			'placeholder' => t('Fax'),
+			),
+		);
+	////////////////////////////////////////
+	$form['contact_message'] = array(
+		'#type' => 'container',
+		);
+	$form['contact_message']['text_message'] = array(
+		'#type' => 'textarea',
+		'#title' => t('Message'),
+		// '#title_display' => 'invisible',
+		'#attributes' => array(
+			'placeholder' => t('Please enter your message, question or comment.'),
+			),
+		);
+	////////////////////////////////////////
+	$form['contact_submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Send'),
+		);
+	return $form;
+}
+
+
+function custom_contact_form_validate($form, &$form_state) {
+	// $valid_email = $form_state['values']['email'];
+	// if (!valid_email_address($valid_email)) {
+	// 	form_set_error('email', 'Sorry. Your email address, ' . $valid_email . ', is not valid. Please submit a valid E-mail address.');
+	// }
+	// if (!empty($form_state['values']['degree'])) {
+	// 	dpm($form_state['values']['degree']);
+	// }
+
+	// form_set_error('devel halt');
+}
+
+function custom_contact_form_submit($form, &$form_state) {
+	$mailbody = array(
+		$form['person']['title']['#title'] => $form_state['values']['title'],
+		$form['person']['degree']['#title'] => $form_state['values']['degree'],
+		$form['person']['name']['#title'] => $form_state['values']['name'],
+		$form['person']['first_name']['#title'] => $form_state['values']['first_name'],
+		$form['person']['company']['#title'] => $form_state['values']['company'],
+		$form['person']['street']['#title'] => $form_state['values']['street'],
+		$form['person']['postcode']['#title'] => $form_state['values']['postcode'],
+		$form['person']['city']['#title'] => $form_state['values']['city'],
+		$form['person']['country']['#title'] => $form_state['values']['country'],
+		$form['person']['email']['#title'] => $form_state['values']['email'],
+		$form['person']['website']['#title'] => $form_state['values']['website'],
+		$form['person']['phone']['#title'] => $form_state['values']['phone'],
+		$form['person']['telefax']['#title'] => $form_state['values']['telefax'],
+		////////////////////////////////////////
+		$form['contact_message']['text_message']['#title'] => $form_state['values']['text_message'],
+		);
+
+  $from = variable_get('site_mail', ''); // or any other email e.g. noreply@example.com
+  // single recipient
+  $to = variable_get('site_mail', ''); // or any other email e.g. webmaster@example.com
+  // multiple recipients
+  // $to  = 'one@email.com, two@email.com, three@email.com';
+
+  /***** ACTUAL MESSAGE START *****/
+  $body[] = _array_to_string($mailbody);
+  /***** ACTUAL MESSAGE END *****/
+
+  $params = array(
+  	'body' => $body,
+  	'subject' => '[Contact Form] ' . $form_state['values']['first_name'] . ' ' . $form_state['values']['name'] . ', ' . $form_state['values']['company'],
+  	);
+
+  if (drupal_mail('custom_contact_block', 'some_mail_key', $to, language_default(), $params, $from, TRUE)) {
+  	drupal_set_message('Many thanks for your enquiry.
+  		<br>
+  		We promise a prompt, accurate and thorough response.');     
+  } else {
+  	drupal_set_message('There was an error sending the form.
+  		<br>
+  		Please send your request directly to info@witels-albert.com');
+  }
+  // as long as the form is inside a block the following line must stay commented
+  // return drupal_render(drupal_get_form('custom_contact_form')); 
+}
+
+/**
+ * Implements hook_mail().
+ */
+function custom_contact_block_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+  $message['body'] = $params['body'];
+}
+
+/**
+ * Implements hook_init().
+ *
+ * input placeholder support for IE
+ */
+function custom_contact_block_init() {
+	if (!path_is_admin(current_path())) {
+		drupal_add_js(drupal_get_path('module', 'custom_contact') .'/scripts/placeholder_support.js');
+	
+	}
+}
+
+/**
+ * helper function
+ */
+function _array_to_string($array) {
+	$string = '';
+	foreach ($array as $key => $value) {
+		$string .= $key . ': ' . $value . "\n";
+	}
+	return $string;
+}
